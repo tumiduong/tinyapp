@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/tumiduong/tinyapp/issues"
   },
-  "homepage": "https://github.com/tumiduong/tinyapp#readme"
+  "homepage": "https://github.com/tumiduong/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
