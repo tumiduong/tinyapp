@@ -5,7 +5,7 @@ const PORT = 8080;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
-const cookieParser = require("cookie-parser");
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 app.set("view engine", "ejs");
@@ -44,8 +44,15 @@ app.post("/urls/:shortURL/delete", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post("/login", (req, res) => {
+  res.cookie("username", req.body.username);
+  res.redirect("/urls");
+});
+
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase }
+  let templateVars = {
+    username: req.cookies["username"],
+    urls: urlDatabase }
   res.render("urls_index", templateVars);
 });
 
