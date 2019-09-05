@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const uuid = require("uuid/v4");
+const bcrypt = require('bcrypt');
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -114,14 +115,14 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body
+  let user = userFinder(email);
 
-  if (!userFinder(email)) {
+  if (!user) {
     res.status(403).send("Email cannot be found.");
-  } else if (!authenticatePw(email, password)) {
+  } else if (!bcrypt.compareSync(password, user.password)) {
     res.status(403).send("Password is not correct.")
-  } else if (userFinder(email) && authenticatePw(email, password)) {
-    let user = userFinder(email);
-    res.cookie("user_id", user.id);
+  } else if (user && bcrypt.compareSync(password, user.password)) {
+    res.cookie("user_id", user);
     res.redirect("/urls");
   }
 });
@@ -133,12 +134,14 @@ app.post("/logout", (req, res) => {
 
 app.post("/register", (req, res) => {
   let userId = userRandom();
-  if (req.body.email === "" || req.body.password === "") {
+  let pW = req.body.password;
+  let hashedPw = bcrypt.hashSync(pW, 10);
+  if (req.body.email === "" || pW === "") {
     res.status(400).send("Please fill out email and/or password.");
   } else if (userFinder(req.body.email)) {
     res.status(400).send("User already exists.");
   } else {
-    users[userId] = { id: userId, email: req.body.email, password: req.body.password };
+    users[userId] = { id: userId, email: req.body.email, password: hashedPw };
     res.cookie("user_id", users[userId]);
     res.redirect("/urls");
   }
