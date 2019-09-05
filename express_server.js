@@ -13,12 +13,11 @@ app.set("view engine", "ejs");
 
 // databases
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+
 };
 
 const users = {
-  'cf86ad32-8': { id: 'cf86ad32-8', email: 'hi@hi.com', password: 'hi' }
+
 };
 
 // functions
@@ -58,7 +57,11 @@ app.get("/", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   let templateVars = { users: req.cookies["user_id"] };
-  res.render("urls_new", templateVars);
+  if (!req.cookies["user_id"]) {
+    res.redirect("/urls");
+  } else {
+    res.render("urls_new", templateVars);
+  }
 });
 
 app.get("/urls", (req, res) => {
@@ -137,7 +140,6 @@ app.post("/register", (req, res) => {
   } else {
     users[userId] = { id: userId, email: req.body.email, password: req.body.password };
     res.cookie("user_id", users[userId]);
-    console.log(users[userId])
     res.redirect("/urls");
   }
 });
