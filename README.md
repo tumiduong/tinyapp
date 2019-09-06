@@ -4,8 +4,8 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-["Front page, displaying all the user's URLs."](https://raw.githubusercontent.com/tumiduong/tinyapp/master/docs/urls-page.png)
-["A shortened URL's page."](https://raw.githubusercontent.com/tumiduong/tinyapp/master/docs/short-url-page.png)
+!["Front page, displaying all the user's URLs."](https://raw.githubusercontent.com/tumiduong/tinyapp/master/docs/urls-page.png)
+!["A shortened URL's page."](https://raw.githubusercontent.com/tumiduong/tinyapp/master/docs/short-url-page.png)
 
 ## Dependencies
 
