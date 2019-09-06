@@ -29,7 +29,7 @@
       <tbody>
         <% for(let shortUrls of Object.keys(urls)) { %>
           <tr>
-            <td><%= shortUrls %></td>
+            <td><a href="/urls/<%= shortUrls %>"><%= shortUrls %></a></td>
             <td><%= urls[shortUrls].longURL %></td>
             <td><form method="GET" action="/urls/<%= shortUrls %>"><button type="submit" class="btn btn-info">Edit</button></form></td>
             <td><form method="POST" action="/urls/<%= shortUrls %>/delete"><button type="submit" class="btn btn-info">Delete</button></form></td>

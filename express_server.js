@@ -42,9 +42,9 @@ const userFinder = (email => {
       foundUser = user;
     }
   }
-    if (Object.keys(foundUser).length === 0) {
-      return false;
-    } 
+  if (Object.keys(foundUser).length === 0) {
+    return false;
+  }
   return foundUser;
 });
 
@@ -57,12 +57,12 @@ const urlsForUser = (id => {
     if (id === obj.userID) {
       userUrls[obj.shortURL] = obj;
     }
-  } 
+  }
 
   if (Object.keys(userUrls).length === 0) {
     return false;
-  } 
-  return userUrls; 
+  }
+  return userUrls;
 });
 
 // see if shortURL was created by current user
@@ -84,7 +84,7 @@ const userMatch = (id, shortURL) => {
 // gets
 
 app.get("/", (req, res) => {
-  res.redirect("/urls")
+  res.redirect("/urls");
 });
 
 app.get("/urls/new", (req, res) => {
@@ -104,7 +104,7 @@ app.get("/urls", (req, res) => {
 
   if (req.session.user_id) {
     templateVars.urls = urlsForUser(req.session.user_id.id);
-  };
+  }
 
   res.render("urls_index", templateVars);
 });
@@ -116,14 +116,14 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   let templateVars = { users: req.session.user_id };
-  res.render("urls_login", templateVars)
+  res.render("urls_login", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
 
-  if(!urlDatabase[req.params.shortURL]) {
-    res.status(500).send("Sorry, that URL doesn't exist!")
-  };
+  if (!urlDatabase[req.params.shortURL]) {
+    res.status(500).send("Sorry, that URL doesn't exist!");
+  }
 
   let templateVars = {
     shortURL: req.params.shortURL,
@@ -132,9 +132,9 @@ app.get("/urls/:shortURL", (req, res) => {
     users: req.session.user_id,
     byUser: false };
 
-    if (req.session.user_id) {
-      templateVars.byUser = userMatch(req.session.user_id.id, req.params.shortURL);
-    };
+  if (req.session.user_id) {
+    templateVars.byUser = userMatch(req.session.user_id.id, req.params.shortURL);
+  }
 
   res.render("urls_show", templateVars);
 });
@@ -143,7 +143,7 @@ app.get("/u/:shortURL", (req, res) => {
 
   if (!urlDatabase[req.params.shortURL]) {
     res.status(500).send("Sorry, that URL doesn't exist!");
-  };
+  }
   
   res.redirect(urlDatabase[req.params.shortURL].longURL);
 });
@@ -160,18 +160,18 @@ app.post("/urls/:shortURL", (req, res) => {
   if (userMatch(req.session.user_id.id, req.params.shortURL)) {
     urlDatabase[req.params.shortURL].longURL = req.body.longURL;
     res.redirect(`/urls/${req.params.shortURL}`);
-  };
+  }
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   if (userMatch(req.session.user_id.id, req.params.shortURL)) {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect("/urls");
-  };
+    delete urlDatabase[req.params.shortURL];
+    res.redirect("/urls");
+  }
 });
 
 app.post("/login", (req, res) => {
-  const { email, password } = req.body
+  const { email, password } = req.body;
   let user = userFinder(email);
 
   if (!user) {
@@ -181,7 +181,7 @@ app.post("/login", (req, res) => {
   } else if (user && bcrypt.compareSync(password, user.password)) {
     req.session.user_id = user;
     res.redirect("/urls");
-  };
+  }
 });
 
 app.post("/logout", (req, res) => {
